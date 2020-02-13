@@ -9,7 +9,6 @@ def main():
     if group_flag:
         #Then ask how many per group
         column_index, sample_size = get_group_sample_size(header)
-        #print(header[column_index], sample_size)
         grouped = data.groupby(by=header[column_index])
         sampled = grouped.apply(lambda x: x.sample(n=sample_size))
     else:
@@ -18,6 +17,7 @@ def main():
         #Sample data set and set to new variable.
         sampled = data.sample(n=sample_size)
     sampled.to_csv("output_%s.csv" % (NOW))
+    print("Sampling Successful!")
 
 #Open .csv, return data as pandas dataframe and header (column names)
 def preview_csv(file):
@@ -29,7 +29,6 @@ def preview_csv(file):
 def group_by_prompt():
     flag = input("Would you like to sample tasks per group? y/n: ")
     flag = flag.lower()
-    print("flag: %s" % (flag))
     if flag == 'y':
         return True
     elif flag == 'n':
@@ -59,12 +58,8 @@ def get_sample_size():
 #   -Group by which column?
 #   -If yes, # of tasks to sample per group.
 def param_prompt():
-    filepath = input("Please paste the filepath of the .csv you wish to randomly sample.")
+    filepath = input("Please paste the filepath of the .csv you wish to randomly sample: \n")
     data, header = preview_csv(filepath)
-    #Column names
-    print(header)
-    #Row count
-    print(data.shape[0])
     group_flag = group_by_prompt()
     return data, header, group_flag
 
